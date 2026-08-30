@@ -1,15 +1,17 @@
+
+Main · JS
 /* ═══════════════════════════════════════
    The Spanish Doctor — main.js
    Theme toggle + mobile nav
 ═══════════════════════════════════════ */
-
+ 
 (function () {
   'use strict';
-
+ 
   /* ── Theme ──────────────────────────── */
   const STORAGE_KEY = 'tsd-theme';
   const root = document.documentElement;
-
+ 
   function applyTheme(theme) {
     if (theme === 'dark') {
       root.setAttribute('data-theme', 'dark');
@@ -24,24 +26,24 @@
       btn.innerHTML = isDark ? iconSun() : iconMoon();
     });
   }
-
+ 
   function getStoredTheme() {
     try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
   }
   function storeTheme(t) {
     try { localStorage.setItem(STORAGE_KEY, t); } catch {}
   }
-
+ 
   function currentTheme() {
     return root.getAttribute('data-theme') || 'light';
   }
-
+ 
   function toggleTheme() {
     const next = currentTheme() === 'dark' ? 'light' : 'dark';
     applyTheme(next);
     storeTheme(next);
   }
-
+ 
   function iconMoon() {
     return `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -60,19 +62,19 @@
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
     </svg>`;
   }
-
+ 
   /* ── Mobile nav ─────────────────────── */
   function initMobileNav() {
     const toggle = document.querySelector('.nav-toggle');
     const links  = document.querySelector('.nav-links');
     if (!toggle || !links) return;
-
+ 
     toggle.addEventListener('click', () => {
       const open = links.classList.toggle('open');
       toggle.setAttribute('aria-expanded', open);
       toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     });
-
+ 
     // Close on link click
     links.querySelectorAll('.nav-link').forEach(a => {
       a.addEventListener('click', () => {
@@ -80,7 +82,7 @@
         toggle.setAttribute('aria-expanded', 'false');
       });
     });
-
+ 
     // Close on outside click
     document.addEventListener('click', e => {
       if (!toggle.contains(e.target) && !links.contains(e.target)) {
@@ -89,7 +91,7 @@
       }
     });
   }
-
+ 
   /* ── Active nav link ────────────────── */
   function markActiveLink() {
     const path = window.location.pathname.split('/').pop() || 'index.html';
@@ -98,13 +100,13 @@
       if (href === path) a.classList.add('active');
     });
   }
-
+ 
   /* ── Contact form (Formspree AJAX) ──── */
   function initContactForm() {
     const form   = document.getElementById('contact-form');
     const status = document.getElementById('form-status');
     if (!form || !status) return;
-
+ 
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const btn = form.querySelector('.btn--primary');
@@ -112,7 +114,7 @@
       btn.textContent = 'Sending…';
       btn.disabled = true;
       status.className = 'form-status';
-
+ 
       try {
         const res = await fetch(form.action, {
           method: 'POST',
@@ -121,7 +123,7 @@
         });
         if (res.ok) {
           status.className = 'form-status success';
-          status.textContent = 'Message sent — I'll be in touch shortly.';
+          status.textContent = "Message sent — I'll be in touch shortly.";
           form.reset();
         } else {
           throw new Error();
@@ -135,28 +137,28 @@
       }
     });
   }
-
+ 
   /* ── Auto year ──────────────────────── */
   function setYear() {
     const el = document.getElementById('current-year');
     if (el) el.textContent = new Date().getFullYear();
   }
-
+ 
   /* ── Init ───────────────────────────── */
   document.addEventListener('DOMContentLoaded', () => {
     // Apply saved theme (or default light)
     const saved = getStoredTheme();
     applyTheme(saved || 'light');
-
+ 
     // Wire toggles
     document.querySelectorAll('.theme-toggle').forEach(btn => {
       btn.addEventListener('click', toggleTheme);
     });
-
+ 
     initMobileNav();
     markActiveLink();
     initContactForm();
     setYear();
   });
-
+ 
 })();
