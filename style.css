@@ -368,6 +368,11 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-
   .photo-wrap { max-width: 320px; margin: 0 auto; }
   .photo-frame { aspect-ratio: 1; }
   .hero-logo-wrap { max-width: 100%; }
+  .photo-badge {
+    white-space: normal;
+    max-width: calc(100% - 1rem);
+  }
+  .photo-badge-text { font-size: 0.7rem; }
 }
 
 /* ══════════════════════════════════════════
